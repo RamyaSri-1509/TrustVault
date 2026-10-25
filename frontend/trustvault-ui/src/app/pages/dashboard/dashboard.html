@@ -1,0 +1,86 @@
+<section class="dashboard-page">
+  <header class="welcome">
+    <div>
+      <p class="eyebrow"><span class="welcome-mark">✦</span> YOUR SECURE WORKSPACE</p>
+      <h1>Good morning, Ramya <span class="wave">✦</span></h1>
+      <p class="page-subtitle">Everything you need to keep your documents secure and organized.</p>
+    </div>
+    <a class="primary-action" routerLink="/documents">
+      <mat-icon>upload_file</mat-icon>
+      Upload Document
+    </a>
+  </header>
+
+  <section class="stats-grid" aria-label="Workspace summary">
+    @for (stat of stats; track stat.label) {
+      <article class="summary-card surface-card">
+        <div class="stat-heading">
+          <span>{{ stat.label }}</span>
+          <span class="stat-icon" [class.green]="stat.tone === 'green'"
+                [class.mint]="stat.tone === 'mint'" [class.blue]="stat.tone === 'blue'"
+                [class.amber]="stat.tone === 'amber'">
+            <mat-icon>{{ stat.icon }}</mat-icon>
+          </span>
+        </div>
+        <strong class="stat-value">{{ stat.value }}</strong>
+        <span class="stat-detail">{{ stat.detail }}</span>
+        @if (stat.label === 'Storage Used') {
+          <div class="dashboard-storage" role="progressbar" aria-label="Storage used" aria-valuemin="0"
+               aria-valuemax="100" aria-valuenow="68"><span></span></div>
+        }
+      </article>
+    }
+  </section>
+
+  <section class="dashboard-content">
+    <article class="recent-documents surface-card">
+      <div class="section-heading">
+        <div><h2>Recent documents</h2><p>Pick up where you left off</p></div>
+        <a routerLink="/documents">View all <mat-icon>arrow_forward</mat-icon></a>
+      </div>
+
+      <div class="document-heading">
+        <span aria-hidden="true"></span><span>DOCUMENT</span><span>CATEGORY</span><span>LAST MODIFIED</span><span>ACCESS</span>
+      </div>
+      @for (document of recentDocuments; track document.name) {
+        <div class="recent-document">
+          <span class="file-icon" [class.pdf]="document.tone === 'pdf'" [class.doc]="document.tone === 'doc'"
+                [class.design]="document.tone === 'design'" [class.sheet]="document.tone === 'sheet'">
+            <mat-icon>{{ document.icon }}</mat-icon>
+          </span>
+          <span class="file-title"><strong>{{ document.name }}</strong><small>{{ document.category }}</small></span>
+          <span class="file-category">{{ document.category }}</span>
+          <span class="file-date">{{ document.modified }}</span>
+          <span class="document-access" [class.shared]="document.access === 'Shared'">{{ document.access }}</span>
+        </div>
+      }
+      <p class="demo-data-note"><mat-icon>info_outline</mat-icon> Demonstration data — document records will come from the TrustVault API.</p>
+    </article>
+
+    <article class="quick-actions surface-card">
+      <div class="section-heading">
+        <div><h2>Quick actions</h2><p>Common tasks, made simple</p></div>
+        <span class="action-heading-icon"><mat-icon>bolt</mat-icon></span>
+      </div>
+      <a class="action-link" routerLink="/documents">
+        <span class="action-icon upload"><mat-icon>upload_file</mat-icon></span>
+        <span><strong>Upload a document</strong><small>Add a file to your workspace</small></span>
+        <mat-icon class="action-arrow">chevron_right</mat-icon>
+      </a>
+      <a class="action-link" routerLink="/documents">
+        <span class="action-icon browse"><mat-icon>folder_open</mat-icon></span>
+        <span><strong>View documents</strong><small>Browse your secure files</small></span>
+        <mat-icon class="action-arrow">chevron_right</mat-icon>
+      </a>
+      <a class="action-link" routerLink="/permissions">
+        <span class="action-icon access"><mat-icon>admin_panel_settings</mat-icon></span>
+        <span><strong>Manage permissions</strong><small>Review who has access</small></span>
+        <mat-icon class="action-arrow">chevron_right</mat-icon>
+      </a>
+      <div class="action-security">
+        <mat-icon>verified_user</mat-icon>
+        <span>Access enforcement will be provided by the connected backend.</span>
+      </div>
+    </article>
+  </section>
+</section>

@@ -1,0 +1,49 @@
+<main class="login-page">
+  <section class="login-card">
+    <a class="brand" routerLink="/" aria-label="TrustVault home">
+      <span class="brand-icon"><mat-icon>verified_user</mat-icon></span>
+      <span class="brand-name">TrustVault</span>
+    </a>
+
+    <p class="eyebrow">SECURE DOCUMENT MANAGEMENT</p>
+    <h1>Welcome to TrustVault</h1>
+    <p class="subtitle">Secure document storage and access management.</p>
+
+    <form (ngSubmit)="login()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email address</mat-label>
+        <mat-icon matPrefix>mail_outline</mat-icon>
+        <input matInput type="email" name="email" [(ngModel)]="email"
+               placeholder="you@example.com" autocomplete="username" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" name="password"
+               [(ngModel)]="password" autocomplete="current-password" required />
+        <button mat-icon-button matSuffix type="button"
+                (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'">
+          <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      @if (errorMessage) {
+        <p class="error-message" role="alert">{{ errorMessage }}</p>
+      }
+
+      <button mat-flat-button type="submit" class="login-button">
+        Sign In <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </form>
+
+    <p class="switch-link">Don't have an account? <a routerLink="/signup">Sign up</a></p>
+
+    <div class="security-info">
+      <mat-icon>shield</mat-icon>
+      <span>Demo access only. Production authentication requires the TrustVault backend.</span>
+    </div>
+    <p class="footer-text">TrustVault · Secure Documents. Trusted Access.</p>
+  </section>
+</main>

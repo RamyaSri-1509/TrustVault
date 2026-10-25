@@ -1,0 +1,53 @@
+<section class="shared-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">COLLABORATION</p>
+      <h1 class="page-heading">Shared With Me</h1>
+      <p class="page-subtitle">Documents other people have shared with you.</p>
+    </div>
+    <span class="share-summary"><mat-icon>people_alt</mat-icon>{{ documents.length }} active shares</span>
+  </header>
+
+  <div class="page-tools">
+    <label class="search-field">
+      <mat-icon>search</mat-icon>
+      <input [(ngModel)]="searchText" placeholder="Search by document, owner, or permission..." aria-label="Search shared documents by document, owner, or permission" />
+    </label>
+    <span class="sample-indicator"><mat-icon>info_outline</mat-icon> Sample workspace data</span>
+  </div>
+
+  <section class="shared-list surface-card" aria-label="Documents shared with you">
+    <div class="list-header">
+      <div><h2>Incoming shares</h2><p>Documents shared with your account</p></div>
+      <span class="document-count">{{ filteredDocuments.length }} <small>documents</small></span>
+    </div>
+    <div class="table-scroll">
+      <div class="shared-row header-row" role="row">
+        <span>DOCUMENT</span><span>SHARED BY</span><span>SHARED DATE</span><span>SIZE</span><span>ACCESS</span>
+      </div>
+      @for (doc of filteredDocuments; track doc.id) {
+        <div class="shared-row" role="row">
+          <div class="document-name">
+            <span class="file-icon" [class.pdf]="doc.name.toLowerCase().endsWith('.pdf')">
+              <mat-icon>{{ doc.name.toLowerCase().endsWith('.pdf') ? 'picture_as_pdf' : 'description' }}</mat-icon>
+            </span>
+            <strong>{{ doc.name }}</strong>
+          </div>
+          <span class="owner-name"><span class="owner-avatar">{{ doc.owner.charAt(0) }}</span>{{ doc.owner }}</span>
+          <span class="date-cell">{{ doc.sharedDate }}</span>
+          <span>{{ doc.size }}</span>
+          <span class="access-label" [class.edit]="doc.access === 'Edit'">
+            <mat-icon>{{ doc.access === 'Edit' ? 'edit' : 'visibility' }}</mat-icon>{{ doc.access }}
+          </span>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <mat-icon>folder_shared</mat-icon>
+          <strong>No shared documents found</strong>
+          <p>Try a different search, or check back when someone shares a file with you.</p>
+        </div>
+      }
+    </div>
+  </section>
+  <p class="sample-note"><mat-icon>info_outline</mat-icon> Shared files and access permissions shown here are demonstration data.</p>
+</section>

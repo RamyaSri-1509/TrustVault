@@ -1,0 +1,88 @@
+
+<div class="signup-page">
+  <div class="signup-card">
+
+    <div class="brand">
+      <div class="brand-icon">🔐</div>
+      <h1>TrustVault</h1>
+      <p>Secure your documents. Control your access.</p>
+    </div>
+
+    <div class="form-heading">
+      <h2>Create your account</h2>
+      <p>Join TrustVault to manage and protect your documents.</p>
+    </div>
+
+    <form (ngSubmit)="onSignup()" #signupForm="ngForm">
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+          email
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+          minlength="8"
+          required
+        />
+        <small>Use at least 8 characters, including uppercase, lowercase, a number, and a symbol.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          placeholder="Enter your password again"
+          autocomplete="new-password"
+          required
+        />
+      </div>
+
+      <div *ngIf="errorMessage" class="message error" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="successMessage" class="message success" role="status">
+        {{ successMessage }}
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loading || !signupForm.valid"
+      >
+        <span *ngIf="!loading">Create account</span>
+        <span *ngIf="loading">Creating account...</span>
+      </button>
+
+    </form>
+
+    <p class="login-link">
+      Already have an account?
+      <a routerLink="/login">Sign in</a>
+    </p>
+
+    <p class="security-note">
+      Your documents deserve a secure home.
+    </p>
+
+  </div>
+</div>

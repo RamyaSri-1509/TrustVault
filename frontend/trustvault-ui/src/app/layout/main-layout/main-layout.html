@@ -1,0 +1,225 @@
+
+<mat-sidenav-container class="app-container" [hasBackdrop]="isMobile">
+  <mat-sidenav
+    class="sidebar"
+    [mode]="isMobile ? 'over' : 'side'"
+    [opened]="!isMobile || mobileNavOpen"
+    [disableClose]="!isMobile"
+    (closedStart)="closeMobileNav()"
+  >
+    <a class="brand" routerLink="/" (click)="closeMobileNav()">
+      <span class="brand-mark"><mat-icon>verified_user</mat-icon></span>
+      <span class="brand-copy">
+        <strong>TrustVault</strong>
+        <small>Secure Documents. Trusted Access.</small>
+      </span>
+    </a>
+
+    <p class="nav-label">WORKSPACE</p>
+    <nav aria-label="Main navigation">
+      <a class="nav-link" routerLink="/" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileNav()">
+        <mat-icon>space_dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-link" routerLink="/documents" routerLinkActive="active" (click)="closeMobileNav()">
+        <mat-icon>folder_open</mat-icon>
+        <span>My Documents</span>
+      </a>
+      <a class="nav-link" routerLink="/shared" routerLinkActive="active" (click)="closeMobileNav()">
+        <mat-icon>people_alt</mat-icon>
+        <span>Shared With Me</span>
+      </a>
+    </nav>
+
+    <p class="nav-label security-label">SECURITY</p>
+    <nav aria-label="Security navigation">
+      <a class="nav-link" routerLink="/permissions" routerLinkActive="active" (click)="closeMobileNav()">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span>Permissions</span>
+      </a>
+      <a class="nav-link" routerLink="/audit-logs" routerLinkActive="active" (click)="closeMobileNav()">
+        <mat-icon>history</mat-icon>
+        <span>Audit Logs</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="footer-shield"><mat-icon>shield</mat-icon></span>
+      <span><strong>Security first</strong><small>Your access, at a glance</small></span>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="workspace">
+    <mat-toolbar class="topbar">
+      @if (isMobile) {
+        <button mat-icon-button class="mobile-menu" (click)="mobileNavOpen = !mobileNavOpen"
+                [attr.aria-expanded]="mobileNavOpen" aria-label="Toggle navigation">
+          <mat-icon>{{ mobileNavOpen ? 'close' : 'menu' }}</mat-icon>
+        </button>
+      }
+      <div class="topbar-context">
+        <span class="context-dot"></span>
+        <span>Secure Workspace</span>
+      </div>
+
+      <label class="global-search" aria-label="Search TrustVault">
+        <mat-icon>search</mat-icon>
+        <input type="search" placeholder="Search documents, users, or actions..." />
+        <kbd>⌘ K</kbd>
+      </label>
+
+      <span class="topbar-spacer"></span>
+      <button mat-icon-button class="notification-button" [matMenuTriggerFor]="notificationsMenu"
+              aria-label="Notifications">
+        <mat-icon>notifications_none</mat-icon>
+        <span class="notification-dot"></span>
+      </button>
+      <mat-menu #notificationsMenu="matMenu" xPosition="before">
+        <div class="menu-heading">Notifications</div>
+        <button mat-menu-item><mat-icon>share</mat-icon><span>A document was shared with you</span></button>
+        <button mat-menu-item><mat-icon>verified_user</mat-icon><span>Security review is up to date</span></button>
+      </mat-menu>
+
+      <button class="profile-button" [matMenuTriggerFor]="profileMenu"
+              #profileMenuTrigger="matMenuTrigger" aria-haspopup="menu" aria-label="Open Ramya's profile menu">
+        <span class="avatar">R</span>
+        <span class="profile-name">Ramya</span>
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu" xPosition="before">
+        <div class="menu-profile"><strong>Ramya</strong><small>ramya@example.com</small></div>
+        <button mat-menu-item (click)="openProfileDialog(profileMenuTrigger)">
+          <mat-icon>person_outline</mat-icon>
+          <span>My profile</span>
+        </button>
+        <button mat-menu-item (click)="openPreferencesDialog(profileMenuTrigger)">
+          <mat-icon>tune</mat-icon>
+          <span>Preferences</span>
+        </button>
+        <button mat-menu-item (click)="openHelpDialog(profileMenuTrigger)">
+          <mat-icon>help_outline</mat-icon>
+          <span>Help &amp; support</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item class="logout-menu-item" (click)="logout(profileMenuTrigger)">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <ng-template #profileDialog>
+      <h2 mat-dialog-title id="profile-dialog-title">My profile</h2>
+      <mat-dialog-content>
+        <div class="profile-detail-card">
+          <span class="profile-detail-avatar">R</span>
+          <div><strong>Ramya</strong><small>Demo account</small></div>
+        </div>
+        <dl class="profile-details">
+          <div><dt>Email address</dt><dd>ramya@example.com</dd></div>
+          <div><dt>Account type</dt><dd>TrustVault demo</dd></div>
+        </dl>
+        <p class="dialog-note">Profile details are sample data until connected to the TrustVault API.</p>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
+      </mat-dialog-actions>
+    </ng-template>
+
+    <ng-template #preferencesDialog>
+      <h2 mat-dialog-title id="preferences-dialog-title">Preferences</h2>
+      <mat-dialog-content>
+        <p class="dialog-description">Choose which workspace updates you want to see. These preview preferences are saved on this device only.</p>
+        <button class="preference-row" role="switch"
+                [attr.aria-checked]="emailNotificationsEnabled"
+                (click)="toggleEmailNotifications()">
+          <span><strong>Email notifications</strong><small>Updates about document sharing</small></span>
+          <span class="preference-switch" [class.enabled]="emailNotificationsEnabled"><span></span></span>
+        </button>
+        <button class="preference-row" role="switch"
+                [attr.aria-checked]="securityAlertsEnabled"
+                (click)="toggleSecurityAlerts()">
+          <span><strong>Security alerts</strong><small>Notices about access changes</small></span>
+          <span class="preference-switch" [class.enabled]="securityAlertsEnabled"><span></span></span>
+        </button>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Done</button>
+      </mat-dialog-actions>
+    </ng-template>
+
+    <ng-template #helpDialog>
+      <h2 mat-dialog-title id="help-dialog-title">Help &amp; support</h2>
+      <mat-dialog-content>
+        <p class="dialog-description">Find your way around the TrustVault demonstration workspace.</p>
+        <div class="help-links">
+          <a mat-button routerLink="/documents" mat-dialog-close><mat-icon>folder_open</mat-icon>Browse your documents</a>
+          <a mat-button routerLink="/permissions" mat-dialog-close><mat-icon>admin_panel_settings</mat-icon>Review permissions</a>
+          <a mat-button routerLink="/audit-logs" mat-dialog-close><mat-icon>history</mat-icon>View audit logs</a>
+        </div>
+        <p class="dialog-note">This frontend demo does not connect to support services. Authentication and document authorization will be provided by the backend.</p>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
+      </mat-dialog-actions>
+    </ng-template>
+
+    <div class="workspace-grid">
+      <main class="page-content">
+        <router-outlet></router-outlet>
+      </main>
+
+      <aside class="information-rail" aria-label="Workspace information">
+        <section class="rail-section quick-stats">
+          <div class="rail-heading">
+            <div><span class="rail-eyebrow">AT A GLANCE</span><h2>Quick Stats</h2></div>
+            <mat-icon>insights</mat-icon>
+          </div>
+          <div class="quick-stat">
+            <span class="stat-icon"><mat-icon>description</mat-icon></span>
+            <span><strong>24</strong><small>Total documents</small></span>
+            <span class="stat-trend">+3</span>
+          </div>
+          <div class="quick-stat">
+            <span class="stat-icon mint"><mat-icon>share</mat-icon></span>
+            <span><strong>8</strong><small>Shared documents</small></span>
+            <span class="stat-trend">Active</span>
+          </div>
+          <div class="storage-summary">
+            <div><span>Storage used</span><strong>6.8 GB <small>of 10 GB</small></strong></div>
+            <div class="storage-track" role="progressbar" aria-label="Storage used" aria-valuemin="0"
+                 aria-valuemax="100" aria-valuenow="68"><span></span></div>
+            <small>68% of your workspace</small>
+          </div>
+        </section>
+
+        <section class="rail-section recent-activity">
+          <div class="rail-heading">
+            <div><span class="rail-eyebrow">LATEST UPDATES</span><h2>Recent Activity</h2></div>
+            <mat-icon>schedule</mat-icon>
+          </div>
+          <div class="rail-activity">
+            <span class="timeline-icon"><mat-icon>upload_file</mat-icon></span>
+            <span><strong>Document uploaded</strong><small>Project Proposal.pdf</small><small>Today · 10:30 AM</small></span>
+          </div>
+          <div class="rail-activity">
+            <span class="timeline-icon"><mat-icon>person_add_alt</mat-icon></span>
+            <span><strong>Access granted</strong><small>Design Report.docx</small><small>Yesterday · 2:15 PM</small></span>
+          </div>
+          <div class="rail-activity">
+            <span class="timeline-icon"><mat-icon>edit_document</mat-icon></span>
+            <span><strong>Document updated</strong><small>Requirements.pdf</small><small>Yesterday · 11:04 AM</small></span>
+          </div>
+          <p class="demo-label">Demonstration activity</p>
+        </section>
+
+        <section class="rail-security">
+          <span class="security-icon"><mat-icon>shield</mat-icon></span>
+          <div><strong>Your workspace is protected</strong><p>Access controls are managed in Permissions. Server-side enforcement will be connected with the backend.</p></div>
+          <a routerLink="/permissions" aria-label="Review permissions"><mat-icon>arrow_forward</mat-icon></a>
+        </section>
+      </aside>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

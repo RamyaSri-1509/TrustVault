@@ -1,0 +1,61 @@
+<section class="documents-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">YOUR LIBRARY</p>
+      <h1 class="page-heading">My Documents</h1>
+      <p class="page-subtitle">Manage and search your documents securely.</p>
+    </div>
+    <label class="upload-button primary-action">
+      <mat-icon>upload_file</mat-icon>
+      Upload Document
+      <input type="file" hidden (change)="onFileSelected($event)" aria-label="Choose a document to add to the preview" />
+    </label>
+  </header>
+
+  <div class="page-tools">
+    <label class="search-field">
+      <mat-icon>search</mat-icon>
+      <input [(ngModel)]="searchText" placeholder="Search by document name, category, or access..." aria-label="Search documents by name, category, or access" />
+    </label>
+    <span class="sample-indicator"><mat-icon>info_outline</mat-icon> Sample workspace data</span>
+  </div>
+
+  <section class="document-list surface-card" aria-label="Your documents">
+    <div class="list-header">
+      <div><h2>Your files</h2><p>Keep your important work organized in one place.</p></div>
+      <span class="document-count">{{ filteredDocuments.length }} <small>documents</small></span>
+    </div>
+
+    <div class="table-scroll">
+      <div class="document-row header-row" role="row">
+        <span>DOCUMENT</span><span>CATEGORY</span><span>SIZE</span><span>LAST MODIFIED</span><span>ACCESS</span>
+      </div>
+      @for (doc of filteredDocuments; track doc.id) {
+        <div class="document-row" role="row">
+          <div class="document-name">
+            <span class="file-icon" [class.pdf]="iconForDocument(doc.name) === 'picture_as_pdf'"
+                  [class.sheet]="iconForDocument(doc.name) === 'table_chart'">
+              <mat-icon>{{ iconForDocument(doc.name) }}</mat-icon>
+            </span>
+            <span class="file-copy"><strong>{{ doc.name }}</strong><small>{{ doc.category }}</small></span>
+          </div>
+          <span class="category-cell">{{ doc.category }}</span>
+          <span>{{ doc.size }}</span>
+          <span class="date-cell">{{ doc.modified }}</span>
+          <span class="access-label" [class.shared]="doc.access === 'Shared'">
+            <mat-icon>{{ doc.access === 'Shared' ? 'group' : 'lock' }}</mat-icon>
+            {{ doc.access }}
+          </span>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <mat-icon>search_off</mat-icon>
+          <strong>No documents found</strong>
+          <p>Try another name, category, or access status.</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <p class="upload-note"><mat-icon>info_outline</mat-icon> Choosing a file adds it to this local preview only. Server upload is not connected yet.</p>
+</section>

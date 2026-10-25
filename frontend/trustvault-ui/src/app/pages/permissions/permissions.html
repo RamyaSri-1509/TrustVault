@@ -1,0 +1,80 @@
+<section class="permissions-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">ACCESS CONTROL</p>
+      <h1 class="page-heading">Permissions</h1>
+      <p class="page-subtitle">Review who can access your documents and what they can do.</p>
+    </div>
+    <span class="demo-chip"><mat-icon>science</mat-icon> Preview mode</span>
+  </header>
+
+  <section class="stats-row" aria-label="Permission summary">
+    <article class="stat-card surface-card">
+      <span class="stat-icon owner-icon"><mat-icon>workspace_premium</mat-icon></span>
+      <div><span>Owners</span><strong>{{ countByRole('Owner') }}</strong></div>
+    </article>
+    <article class="stat-card surface-card">
+      <span class="stat-icon editor-icon"><mat-icon>edit_document</mat-icon></span>
+      <div><span>Editors</span><strong>{{ countByRole('Editor') }}</strong></div>
+    </article>
+    <article class="stat-card surface-card">
+      <span class="stat-icon viewer-icon"><mat-icon>visibility</mat-icon></span>
+      <div><span>Viewers</span><strong>{{ countByRole('Viewer') }}</strong></div>
+    </article>
+  </section>
+
+  <section class="permissions-list surface-card" aria-label="Document access permissions">
+    <div class="list-header">
+      <div><h2>Document access</h2><p>People and roles assigned to your files</p></div>
+      <span class="record-count">{{ permissions.length }} <small>records</small></span>
+    </div>
+    <div class="table-scroll">
+      <div class="permission-row header-row" role="row">
+        <span>DOCUMENT</span><span>USER</span><span>ROLE</span><span>ACCESS</span><span>SHARED DATE</span><span>ACTION</span>
+      </div>
+      @for (item of permissions; track item.id) {
+        <div class="permission-entry">
+          <div class="permission-row" role="row">
+            <div class="document-name"><span class="file-icon"><mat-icon>description</mat-icon></span><strong>{{ item.documentName }}</strong></div>
+            <div class="user-info">
+              <span class="user-avatar">{{ item.userName.charAt(0) }}</span>
+              <span><strong>{{ item.userName }}</strong><small>{{ item.email }}</small></span>
+            </div>
+            <span class="role-badge" [class.owner]="item.role === 'Owner'"
+                  [class.editor]="item.role === 'Editor'" [class.viewer]="item.role === 'Viewer'">
+              {{ item.role }}
+            </span>
+            <span class="access-badge" [class.edit]="item.access === 'Edit'">
+              <mat-icon>{{ item.access === 'Edit' ? 'edit' : 'visibility' }}</mat-icon>{{ item.access }}
+            </span>
+            <span class="date-cell">{{ item.sharedDate }}</span>
+            @if (item.role === 'Owner') {
+              <span class="owner-protected"><mat-icon>lock</mat-icon>Owner protected</span>
+            } @else {
+              <button mat-button class="revoke-button" [disabled]="pendingRevokeId === item.id"
+                      (click)="requestRevoke(item.id)">
+                <mat-icon>person_remove</mat-icon> Revoke access
+              </button>
+            }
+          </div>
+          @if (pendingRevokeId === item.id) {
+            <div class="revoke-confirmation" role="alertdialog" aria-label="Confirm access revocation">
+              <span><mat-icon>warning_amber</mat-icon> Revoke {{ item.userName }}'s access to this document?</span>
+              <div>
+                <button mat-button type="button" class="cancel-button" (click)="cancelRevokeAccess()">Cancel</button>
+                <button mat-flat-button type="button" class="confirm-button" (click)="confirmRevokeAccess()">Revoke access</button>
+              </div>
+            </div>
+          }
+        </div>
+      } @empty {
+        <div class="empty-state"><mat-icon>admin_panel_settings</mat-icon><strong>No permission records</strong><p>There are no access grants to display.</p></div>
+      }
+    </div>
+  </section>
+
+  <div class="security-note">
+    <mat-icon>info</mat-icon>
+    <span>Changes in this preview affect sample data only. Actual document access requires authorization enforced by the backend.</span>
+  </div>
+</section>
