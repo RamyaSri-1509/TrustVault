@@ -10,12 +10,13 @@ import { AuditLogs } from './pages/audit-logs/audit-logs';
 import { Login } from './pages/login/login';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   {
     path: '',
     component: MainLayout,
     children: [
-      { path: '', component: Dashboard },
+      { path: 'dashboard', component: Dashboard },
       { path: 'documents', component: Documents },
       { path: 'shared', component: SharedDocuments },
       { path: 'permissions', component: Permissions },
@@ -23,5 +24,5 @@ export const routes: Routes = [
       { path: 'audit-logs', component: AuditLogs }
     ]
   },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'login' }
 ];
